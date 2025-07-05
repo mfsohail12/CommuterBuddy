@@ -7,6 +7,7 @@ import { FaTrain } from "react-icons/fa6";
 import { FaClock } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
 import { FaArrowLeftLong } from "react-icons/fa6";
+import { FaExternalLinkAlt } from 'react-icons/fa'
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
@@ -25,6 +26,11 @@ function MapPage() {
   const location = useLocation();
   const { buddy } = location.state || {};
   const navigate = useNavigate();
+
+  const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+  buddy.stationAddress
+)}`
+
 
   // parsing transitNumber to determine transit type
   const trainRegex = /\b(train)\b/i;
@@ -117,6 +123,15 @@ function MapPage() {
                 <p className="text-sm font-medium text-blue-600">
                   Departure: {buddy.departureTime}
                 </p>
+                <a
+                  href={mapsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-2 inline-flex items-center text-blue-600 hover:underline"
+                >
+                  <FaExternalLinkAlt className="mr-1" /> Open in Google Maps
+                </a>
+
               </div>
             </Popup>
           </Marker>
