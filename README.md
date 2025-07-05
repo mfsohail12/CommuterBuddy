@@ -88,3 +88,37 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+## Chat Feature
+
+This app includes a real-time chat feature powered by Flask-SocketIO.
+
+### Setup Chat Server
+
+1. **Install Python dependencies**:
+   ```bash
+   pip install flask flask-cors flask-socketio
+   ```
+   Or use the requirements file:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+2. **Start the chat server**:
+   ```bash
+   python chat_server.py
+   ```
+   The server will run on http://localhost:5000
+
+3. **Start the React app**:
+   ```bash
+   npm start
+   ```
+   The app will run on http://localhost:3000
+
+### Using the Chat
+
+- Navigate through the app flow to reach the Map page
+- Click the green "💬 Chat" button in the bottom-right corner
+- Start chatting with other users in the same room
+- Each buddy connection creates a unique chat room based on the buddy ID
