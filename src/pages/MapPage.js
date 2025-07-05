@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { supabase} from "../lib/supabase.js"
 import { useLocation, useNavigate } from "react-router-dom";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { FaBus } from "react-icons/fa";
@@ -10,6 +11,7 @@ import { FaArrowLeftLong } from "react-icons/fa6";
 import { FaExternalLinkAlt } from 'react-icons/fa'
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
+import RealtimeChat from '../components/RealtimeChat';
 
 // Fix for default markers in react-leaflet
 delete L.Icon.Default.prototype._getIconUrl;
@@ -41,6 +43,41 @@ function MapPage() {
   } else if (subwayMetroRegex.test(buddy.transitNumber)) {
     transitType = "subwayMetro";
   }
+  const [chatOpen, setChatOpen] = useState(false);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    // Get current user
+    const getCurrentUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user);
+    };
+    
+    getCurrentUser();
+
+    // Listen for auth changes
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  // Dummy Data
+  const [messages, setMessages] = useState([
+    {
+      username: "Alice",
+      message: "wsp?",
+      icon: "https://api.dicebear.com/7.x/avataaars/svg?seed=woskfjds",
+    },
+    {
+      username: "Bob",
+      message: "hi",
+      icon: "https://api.dicebear.com/7.x/avataaars/svg?seed=fdajsljfldaskl",
+    }
+  ]);
 
   if (!buddy) {
     return (
@@ -59,6 +96,9 @@ function MapPage() {
       </div>
     );
   }
+  const username = "Bob";
+  const icon = messages[1].icon;
+  // Dummy Data
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-[#528CF7] to-[#786AF1]">
@@ -104,6 +144,37 @@ function MapPage() {
         </div>
       </div>
 
+      {/* Chat Button - Only show when chat is closed */}
+      {!chatOpen && (
+        <button 
+          onClick={() => setChatOpen(true)} 
+          className="fixed bottom-6 right-6 bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-lg transition-colors z-[1000]"
+        >
+          💬 Chat
+        </button>
+      )}
+      {/* Sign in prompt if not authenticated */}
+      {chatOpen && !user && (
+        <div className="relative z-50 right-0 top-0 h-full w-80 bg-white shadow-xl border-l border-gray-200 flex items-center justify-center">
+          <div className="text-center p-6">
+            <p className="text-gray-600 mb-4">Please sign in to use chat</p>
+            <button
+              onClick={() => setChatOpen(false)}
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Chat Side Panel */}
+      {chatOpen && user && (
+        <RealtimeChat 
+          roomName={`buddy-${buddy.id}`}
+          onClose={() => setChatOpen(false)} 
+        />
+      )}
       <div className="bg-white overflow-hidden h-full w-screen">
         <MapContainer
           center={[buddy.lat, buddy.lng]}
