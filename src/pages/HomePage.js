@@ -92,7 +92,7 @@ function HomePage() {
         style={{ height: "calc(100vh - 4rem)" }}
       >
         <div className="flex flex-col justify-center items-center">
-          <h1 className="text-6xl font-bold text-white mb-8">Commuter Buddy</h1>
+          <img alt="Commuter Buddy" src="/Logo.webp" className="scale-125 -my-10 -mb-20 -ml-22 -mr-26" />
           <p className="text-xl text-white mb-12">
             Find your perfect commute companion
           </p>
