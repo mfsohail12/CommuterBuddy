@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
+import { MdEmojiPeople } from "react-icons/md";
+import { FaMapMarkedAlt } from "react-icons/fa";
 import AuthModal from "../components/AuthModal";
 import AddRequestModal from "../components/AddRequestModal";
 
@@ -53,14 +55,8 @@ function HomePage() {
             <div className="flex items-center space-x-4">
               {user ? (
                 <>
-                  <button
-                    onClick={() => setAddRequestModalOpen(true)}
-                    className="text-white hover:text-blue-200 px-3 py-2 rounded-md text-sm font-medium"
-                  >
-                    Add Request
-                  </button>
-                  <span className="text-white text-sm">
-                    Welcome, {user.user_metadata?.full_name || user.email}
+                  <span className="text-white text-sm font-bold">
+                    Welcome, {user.user_metadata?.full_name || user.email}!
                   </span>
                   <button
                     onClick={handleSignOut}
@@ -95,16 +91,24 @@ function HomePage() {
         className="flex items-center justify-center"
         style={{ height: "calc(100vh - 4rem)" }}
       >
-        <div className="text-center">
+        <div className="flex flex-col justify-center items-center">
           <h1 className="text-6xl font-bold text-white mb-8">Commuter Buddy</h1>
           <p className="text-xl text-white mb-12">
             Find your perfect commute companion
           </p>
           <button
             onClick={handleGoClick}
-            className="bg-white text-blue-600 px-16 py-6 rounded-full text-2xl font-semibold hover:bg-gray-100 transition-colors shadow-lg"
+            className="flex justify-center items-center gap-2 bg-white text-blue-600 px-16 py-6 rounded-full text-2xl font-semibold hover:bg-gray-100 transition-colors shadow-lg mb-4"
           >
-            GO
+            <MdEmojiPeople className="text-3xl" />
+            Find a Buddy
+          </button>
+          <button
+            onClick={() => setAddRequestModalOpen(true)}
+            className="flex justify-center items-center gap-3 text-white hover:text-blue-200 px-3 py-2 rounded-md text-xl font-medium"
+          >
+            <FaMapMarkedAlt className="text-xl" />
+            Add Your Route
           </button>
         </div>
       </div>
