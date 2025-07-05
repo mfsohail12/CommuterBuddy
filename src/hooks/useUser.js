@@ -5,11 +5,12 @@ const useUser = () => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
     });
   }, []);
+
+  console.log(user);
 
   return user?.user_metadata;
 };

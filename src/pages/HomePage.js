@@ -5,13 +5,15 @@ import { MdEmojiPeople } from "react-icons/md";
 import { FaMapMarkedAlt } from "react-icons/fa";
 import AuthModal from "../components/AuthModal";
 import AddRequestModal from "../components/AddRequestModal";
+import useRoute from "../hooks/useRoute";
 
 function HomePage() {
-  const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [authMode, setAuthMode] = useState("signin");
   const [addRequestModalOpen, setAddRequestModalOpen] = useState(false);
+  const navigate = useNavigate();
+  const route = useRoute();
 
   useEffect(() => {
     // Get initial session
@@ -103,13 +105,23 @@ function HomePage() {
             <MdEmojiPeople className="text-3xl" />
             Find a Buddy
           </button>
-          <button
-            onClick={() => setAddRequestModalOpen(true)}
-            className="flex justify-center items-center gap-3 text-white hover:text-blue-200 px-3 py-2 rounded-md text-xl font-medium"
-          >
-            <FaMapMarkedAlt className="text-xl" />
-            Add Your Route
-          </button>
+          {route != null ? (
+            <button
+              onClick={() => {}}
+              className="flex justify-center items-center gap-3 text-white hover:text-blue-200 px-3 py-2 rounded-md text-xl font-medium"
+            >
+              <FaMapMarkedAlt className="text-xl" />
+              Update Your Route
+            </button>
+          ) : (
+            <button
+              onClick={() => setAddRequestModalOpen(true)}
+              className="flex justify-center items-center gap-3 text-white hover:text-blue-200 px-3 py-2 rounded-md text-xl font-medium"
+            >
+              <FaMapMarkedAlt className="text-xl" />
+              Add Your Route
+            </button>
+          )}
         </div>
       </div>
 
