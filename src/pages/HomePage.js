@@ -98,7 +98,7 @@ function HomePage() {
           </p>
           <button
             onClick={handleGoClick}
-            className="flex justify-center items-center gap-2 bg-white text-blue-600 px-16 py-6 rounded-full text-2xl font-semibold hover:bg-gray-100 transition-colors shadow-lg mb-4"
+            className="flex justify-center items-center gap-2 bg-white relative z-20 text-blue-600 px-16 py-6 rounded-full text-2xl font-semibold hover:bg-gray-100 transition-colors shadow-lg mb-4"
           >
             <MdEmojiPeople className="text-3xl" />
             Find a Buddy
