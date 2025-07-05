@@ -11,7 +11,7 @@ const useUser = () => {
     });
   }, []);
 
-  return user;
+  return user?.user_metadata;
 };
 
 export default useUser;

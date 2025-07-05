@@ -130,9 +130,7 @@ function TransitSelectPage() {
             <>
               <div className="space-y-4 mb-8">
                 {options
-                  .filter(
-                    (option) => option.userName != user.user_metadata?.full_name
-                  )
+                  .filter((option) => option.userName != user.full_name)
                   .map((option) => (
                     <div
                       key={option.id}
