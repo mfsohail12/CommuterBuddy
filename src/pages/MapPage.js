@@ -58,7 +58,7 @@ function MapPage() {
     <div className="min-h-screen bg-gradient-to-r from-[#528CF7] to-[#786AF1]">
       <div className="shadow-lg p-4">
         <button
-          className="absolute top-3 left-5 flex justify-center items-center gap-3 text-white"
+          className="absolute top-9 left-6 flex justify-center items-center gap-3 text-white"
           onClick={() => navigate("/")}
         >
           <FaArrowLeftLong className="text-lg" />
