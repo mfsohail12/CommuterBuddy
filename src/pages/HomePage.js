@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { supabase } from '../lib/supabase';
-import AuthModal from '../components/AuthModal';
-import AddRequestModal from '../components/AddRequestModal';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "../lib/supabase";
+import AuthModal from "../components/AuthModal";
+import AddRequestModal from "../components/AddRequestModal";
 
 function HomePage() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [authModalOpen, setAuthModalOpen] = useState(false);
-  const [authMode, setAuthMode] = useState('signin');
+  const [authMode, setAuthMode] = useState("signin");
   const [addRequestModalOpen, setAddRequestModalOpen] = useState(false);
 
   useEffect(() => {
@@ -28,7 +28,7 @@ function HomePage() {
   }, []);
 
   const handleGoClick = () => {
-    navigate('/university');
+    navigate("/university");
   };
 
   const handleSignOut = async () => {
@@ -45,11 +45,11 @@ function HomePage() {
       {/* Navbar */}
       <nav className="bg-white/10 backdrop-blur-sm border-b border-white/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
+          <div className="flex justify-between items-center h-16 ">
             <div className="flex items-center">
               <h1 className="text-xl font-bold text-white">Commuter Buddy</h1>
             </div>
-            
+
             <div className="flex items-center space-x-4">
               {user ? (
                 <>
@@ -72,13 +72,13 @@ function HomePage() {
               ) : (
                 <>
                   <button
-                    onClick={() => openAuthModal('signin')}
+                    onClick={() => openAuthModal("signin")}
                     className="text-white hover:text-blue-200 px-3 py-2 rounded-md text-sm font-medium"
                   >
                     Sign In
                   </button>
                   <button
-                    onClick={() => openAuthModal('signup')}
+                    onClick={() => openAuthModal("signup")}
                     className="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
                   >
                     Sign Up
@@ -91,11 +91,12 @@ function HomePage() {
       </nav>
 
       {/* Main Content */}
-      <div className="flex items-center justify-center" style={{ height: 'calc(100vh - 4rem)' }}>
+      <div
+        className="flex items-center justify-center"
+        style={{ height: "calc(100vh - 4rem)" }}
+      >
         <div className="text-center">
-          <h1 className="text-6xl font-bold text-white mb-8">
-            Commuter Buddy
-          </h1>
+          <h1 className="text-6xl font-bold text-white mb-8">Commuter Buddy</h1>
           <p className="text-xl text-white mb-12">
             Find your perfect commute companion
           </p>
