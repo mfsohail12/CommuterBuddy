@@ -5,6 +5,7 @@ import UniversitySelectPage from './pages/UniversitySelectPage';
 import TransitSelectPage from './pages/TransitSelectPage';
 import ConnectPage from './pages/ConnectPage';
 import MapPage from './pages/MapPage';
+import NotFoundPage from './pages/NotFoundPage';
 import './App.css';
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
         <Route path="/transit" element={<TransitSelectPage />} />
         <Route path="/connect" element={<ConnectPage />} />
         <Route path="/map" element={<MapPage />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </div>
   );
