@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 import useUser from "../hooks/useUser";
 import useRoute from "../hooks/useRoute";
+import { FaArrowLeftLong } from "react-icons/fa6";
 
 function TransitSelectPage() {
   const [selectedOption, setSelectedOption] = useState(null);
@@ -63,16 +64,6 @@ function TransitSelectPage() {
             departureTime: "08:00:00", // creates Date with current date and time
             lat: 43.6677,
             lng: -79.3948,
-            university: "UofT",
-          },
-          {
-            id: 2,
-            userName: "Bob",
-            transitNumber: "Metro Line 1",
-            stationAddress: "St. George Station",
-            departureTime: "08:15:00",
-            lat: 43.6629,
-            lng: -79.3957,
             university: "UofT",
           },
         ];
@@ -151,19 +142,33 @@ function TransitSelectPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+        <button
+          className="absolute top-9 left-6 flex justify-center items-center gap-3 text-white"
+          onClick={() => navigate("/")}
+        >
+          <FaArrowLeftLong className="text-lg" />
+          <p className="font-bold text-md">Go back</p>
+        </button>
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading commute options...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
+          <p className="text-white">Loading commute options...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-500 to-purple-600 py-8">
+      <button
+        className="absolute top-9 left-6 flex justify-center items-center gap-3 text-white"
+        onClick={() => navigate("/")}
+      >
+        <FaArrowLeftLong className="text-lg" />
+        <p className="font-bold text-md">Go back</p>
+      </button>
       <div className="max-w-2xl mx-auto px-4">
-        <div className="bg-white rounded-lg shadow-md p-8">
+        <div className="bg-white rounded-lg shadow-lg p-8">
           <h2 className="text-3xl font-bold text-gray-800 mb-2 text-center">
             Select Transit Option
           </h2>
@@ -180,7 +185,7 @@ function TransitSelectPage() {
               </p>
               <button
                 onClick={() => navigate("/university")}
-                className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
               >
                 Go Back
               </button>
@@ -208,7 +213,7 @@ function TransitSelectPage() {
                             <strong>Transit:</strong> {option.transitNumber}
                           </p>
                           <p>
-                            <strong>Station:</strong> {option.stationAddress}
+                            <strong>Destination:</strong> {option.stationAddress}
                           </p>
                           <p>
                             <strong>Departure:</strong> {option.departureTime}
