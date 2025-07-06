@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { FaArrowLeftLong } from "react-icons/fa6";
 
 function UniversitySelectPage() {
   const [selectedUniversity, setSelectedUniversity] = useState('');
@@ -48,50 +49,63 @@ function UniversitySelectPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-8">
-      <div className="max-w-lg w-full mx-4">
-        <div className="bg-white rounded-lg shadow-md p-8">
-          <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
-            Select Your University
-          </h2>
-          
-          <div className="max-h-96 overflow-y-auto space-y-3 mb-8 pr-2">
-            {universities.map((university) => (
-              <label
-                key={university.id}
-                className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors"
-              >
-                <input
-                  type="radio"
-                  name="university"
-                  value={university.id}
-                  checked={selectedUniversity === university.id}
-                  onChange={(e) => setSelectedUniversity(e.target.value)}
-                  className="w-4 h-4 text-blue-600 mr-3 flex-shrink-0"
-                />
-                <div className="flex-1">
-                  <span className="text-lg font-medium text-gray-700 block">
-                    {university.name}
-                  </span>
-                  <span className="text-sm text-gray-500 block">
-                    {university.id}
-                  </span>
-                </div>
-              </label>
-            ))}
-          </div>
+    <div className="min-h-screen bg-gradient-to-br from-blue-500 to-purple-600">
+      {/* Go Back Button */}
+      <div className="absolute top-6 left-6">
+        <button
+          onClick={() => navigate("/")}
+          className="flex justify-center items-center gap-3 text-white hover:text-blue-200 transition-colors"
+        >
+          <FaArrowLeftLong className="text-lg" />
+          <p className="font-bold text-md">Go back</p>
+        </button>
+      </div>
 
-          <button
-            onClick={handleNext}
-            disabled={!selectedUniversity}
-            className={`w-full py-3 px-6 rounded-lg font-semibold transition-colors ${
-              selectedUniversity
-                ? 'bg-blue-600 text-white hover:bg-blue-700'
-                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-            }`}
-          >
-            Next
-          </button>
+      <div className="flex items-center justify-center min-h-screen py-8">
+        <div className="max-w-lg w-full mx-4">
+          <div className="bg-white rounded-lg shadow-lg p-8">
+            <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
+              Select Your University
+            </h2>
+            
+            <div className="max-h-96 overflow-y-auto space-y-3 mb-8 pr-2">
+              {universities.map((university) => (
+                <label
+                  key={university.id}
+                  className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors"
+                >
+                  <input
+                    type="radio"
+                    name="university"
+                    value={university.id}
+                    checked={selectedUniversity === university.id}
+                    onChange={(e) => setSelectedUniversity(e.target.value)}
+                    className="w-4 h-4 text-blue-600 mr-3 flex-shrink-0"
+                  />
+                  <div className="flex-1">
+                    <span className="text-lg font-medium text-gray-700 block">
+                      {university.name}
+                    </span>
+                    <span className="text-sm text-gray-500 block">
+                      {university.id}
+                    </span>
+                  </div>
+                </label>
+              ))}
+            </div>
+
+            <button
+              onClick={handleNext}
+              disabled={!selectedUniversity}
+              className={`w-full py-3 px-6 rounded-lg font-semibold transition-colors ${
+                selectedUniversity
+                  ? 'bg-blue-600 text-white hover:bg-blue-700'
+                  : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              }`}
+            >
+              Next
+            </button>
+          </div>
         </div>
       </div>
     </div>

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 import useRoute from "../hooks/useRoute";
+import { FaArrowLeftLong } from "react-icons/fa6";
 
 function BusPage() {
   const [formData, setFormData] = useState({
@@ -146,19 +147,31 @@ function BusPage() {
 
   if (routeLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading your route...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
+          <p className="text-white">Loading your route...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-8">
-      <div className="max-w-md w-full mx-4">
-        <div className="bg-white rounded-lg shadow-md p-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-500 to-purple-600">
+      {/* Go Back Button */}
+      <div className="absolute top-6 left-6">
+        <button
+          onClick={() => navigate("/")}
+          className="flex justify-center items-center gap-3 text-white hover:text-blue-200 transition-colors"
+        >
+          <FaArrowLeftLong className="text-lg" />
+          <p className="font-bold text-md">Go back</p>
+        </button>
+      </div>
+
+      <div className="flex items-center justify-center min-h-screen py-8">
+        <div className="max-w-md w-full mx-4">
+        <div className="bg-white rounded-lg shadow-lg p-8">
           <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
             {isUpdating ? 'Update Your Route' : 'Add Your Route'}
           </h2>
@@ -275,6 +288,7 @@ function BusPage() {
             </button>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );

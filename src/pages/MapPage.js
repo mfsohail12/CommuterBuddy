@@ -137,7 +137,7 @@ function MapPage() {
             <span className="flex justify-center items-center gap-2">
               <FaLocationDot className="text-lg" />
               <span>
-                <strong>Station:</strong> {buddy.stationAddress}
+                <strong>Destination:</strong> {buddy.stationAddress}
               </span>
             </span>
           </div>

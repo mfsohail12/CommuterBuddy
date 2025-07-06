@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
+import { FaArrowLeftLong } from "react-icons/fa6";
 
 function ConnectPage() {
   const navigate = useNavigate();
@@ -16,16 +17,23 @@ function ConnectPage() {
 
   if (!buddy) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+        <button
+          className="absolute top-9 left-6 flex justify-center items-center gap-3 text-white"
+          onClick={() => navigate("/")}
+        >
+          <FaArrowLeftLong className="text-lg" />
+          <p className="font-bold text-md">Go back</p>
+        </button>
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">
+          <h2 className="text-2xl font-bold text-white mb-4">
             No buddy selected
           </h2>
           <button
             onClick={() => navigate("/transit")}
-            className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700"
+            className="bg-white hover:bg-gray-100 text-blue-600 px-6 py-3 rounded-lg font-semibold transition-colors"
           >
-            Go Back
+            Go to Transit Selection
           </button>
         </div>
       </div>
@@ -33,9 +41,16 @@ function ConnectPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+    <div className="min-h-screen bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+      <button
+        className="absolute top-9 left-6 flex justify-center items-center gap-3 text-white"
+        onClick={() => navigate("/")}
+      >
+        <FaArrowLeftLong className="text-lg" />
+        <p className="font-bold text-md">Go back</p>
+      </button>
       <div className="max-w-md w-full mx-4">
-        <div className="bg-white rounded-lg shadow-md p-8">
+        <div className="bg-white rounded-lg shadow-lg p-8">
           <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
             Connect with Buddy
           </h2>
@@ -55,7 +70,7 @@ function ConnectPage() {
                 <strong>Departure:</strong> {buddy.departureTime}
               </p>
               <p>
-                <strong>Station:</strong> {buddy.stationAddress}
+                <strong>Destination:</strong> {buddy.stationAddress}
               </p>
             </div>
           </div>
