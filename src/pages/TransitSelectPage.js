@@ -12,10 +12,44 @@ function TransitSelectPage() {
   const location = useLocation();
   const { university } = location.state || {};
   const user = useUser();
-  const route = useRoute();
+  const { route, loading: routeLoading } = useRoute();
+
+  const universities = [
+    { id: 'UofT', name: 'University of Toronto' },
+    { id: 'York', name: 'York University' },
+    { id: 'TMU', name: 'Toronto Metropolitan University' },
+    { id: 'UBC', name: 'University of British Columbia' },
+    { id: 'McGill', name: 'McGill University' },
+    { id: 'UWaterloo', name: 'University of Waterloo' },
+    { id: 'McMaster', name: 'McMaster University' },
+    { id: 'Queens', name: 'Queen\'s University' },
+    { id: 'Western', name: 'Western University' },
+    { id: 'UAlberta', name: 'University of Alberta' },
+    { id: 'UCalgary', name: 'University of Calgary' },
+    { id: 'UOttawa', name: 'University of Ottawa' },
+    { id: 'Carleton', name: 'Carleton University' },
+    { id: 'SFU', name: 'Simon Fraser University' },
+    { id: 'Concordia', name: 'Concordia University' },
+    { id: 'UQAM', name: 'Université du Québec à Montréal' },
+    { id: 'UManitoba', name: 'University of Manitoba' },
+    { id: 'USask', name: 'University of Saskatchewan' },
+    { id: 'MUN', name: 'Memorial University' },
+    { id: 'Dalhousie', name: 'Dalhousie University' },
+    { id: 'UNB', name: 'University of New Brunswick' },
+    { id: 'UPEI', name: 'University of Prince Edward Island' },
+    { id: 'StFX', name: 'St. Francis Xavier University' },
+    { id: 'UVic', name: 'University of Victoria' },
+    { id: 'UNBC', name: 'University of Northern British Columbia' },
+    { id: 'OCAD', name: 'OCAD University' }
+  ];
+
+  const getUniversityName = (universityId) => {
+    const uni = universities.find(u => u.id === universityId);
+    return uni ? uni.name : universityId;
+  };
 
   useEffect(() => {
-    if (!user || !route) return;
+    if (!user || !route || routeLoading) return;
 
     const loadCommuteOptions = async () => {
       try {
@@ -48,8 +82,6 @@ function TransitSelectPage() {
           .from("commute_requests")
           .select("*")
           .neq("user_id", user.id)
-          .eq("departure_time", route.departure_time)
-          .eq("bus_number", route.bus_number)
           .order("created_at", { ascending: false });
 
         if (error) {
@@ -78,7 +110,8 @@ function TransitSelectPage() {
               )
             : combinedRoutes;
 
-          const transitFilteredRoutes = uniFilteredRoutes.filter(
+          // Try to find exact matches first (same route and time)
+          const exactMatches = uniFilteredRoutes.filter(
             (otherRoute) => {
               return (
                 otherRoute.transitNumber === route.bus_number &&
@@ -87,7 +120,17 @@ function TransitSelectPage() {
             }
           );
 
-          setOptions(transitFilteredRoutes);
+          // If no exact matches, show routes with same transit number
+          const transitMatches = exactMatches.length > 0 ? exactMatches : uniFilteredRoutes.filter(
+            (otherRoute) => {
+              return otherRoute.transitNumber === route.bus_number;
+            }
+          );
+
+          // If still no matches, show all routes for the same university
+          const finalOptions = transitMatches.length > 0 ? transitMatches : uniFilteredRoutes;
+
+          setOptions(finalOptions);
         }
       } catch (error) {
         console.error("Error loading data:", error);
@@ -98,7 +141,7 @@ function TransitSelectPage() {
     };
 
     loadCommuteOptions();
-  }, [university, user?.id, route?.bus_number]);
+  }, [university, user, route, routeLoading]);
 
   const handleNext = () => {
     if (selectedOption) {
@@ -126,14 +169,14 @@ function TransitSelectPage() {
           </h2>
           <p className="text-gray-600 mb-8 text-center">
             {university
-              ? `Going to ${university}`
+              ? `Going to ${getUniversityName(university)}`
               : "Available commute options"}
           </p>
 
           {options.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-gray-500 text-lg mb-4">
-                No commute options available for {university}
+                No commute options available for {getUniversityName(university)}
               </p>
               <button
                 onClick={() => navigate("/university")}
@@ -172,7 +215,7 @@ function TransitSelectPage() {
                           </p>
                           {option.university && (
                             <p>
-                              <strong>University:</strong> {option.university}
+                              <strong>University:</strong> {getUniversityName(option.university)}
                             </p>
                           )}
                         </div>

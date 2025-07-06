@@ -5,6 +5,7 @@ import UniversitySelectPage from "./pages/UniversitySelectPage";
 import TransitSelectPage from "./pages/TransitSelectPage";
 import ConnectPage from "./pages/ConnectPage";
 import MapPage from "./pages/MapPage";
+import BusPage from "./pages/BusPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import { Toaster } from "react-hot-toast";
 import "./App.css";
@@ -19,6 +20,7 @@ function App() {
           <Route path="/transit" element={<TransitSelectPage />} />
           <Route path="/connect" element={<ConnectPage />} />
           <Route path="/map" element={<MapPage />} />
+          <Route path="/bus" element={<BusPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </div>

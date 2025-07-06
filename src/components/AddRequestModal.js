@@ -137,7 +137,29 @@ export default function AddRequestModal({ isOpen, onClose, onSuccess }) {
               <option value="">Select your university</option>
               <option value="UofT">University of Toronto</option>
               <option value="York">York University</option>
-              <option value="Ryerson">Toronto Metropolitan University</option>
+              <option value="TMU">Toronto Metropolitan University</option>
+              <option value="UBC">University of British Columbia</option>
+              <option value="McGill">McGill University</option>
+              <option value="UWaterloo">University of Waterloo</option>
+              <option value="McMaster">McMaster University</option>
+              <option value="Queens">Queen's University</option>
+              <option value="Western">Western University</option>
+              <option value="UAlberta">University of Alberta</option>
+              <option value="UCalgary">University of Calgary</option>
+              <option value="UOttawa">University of Ottawa</option>
+              <option value="Carleton">Carleton University</option>
+              <option value="SFU">Simon Fraser University</option>
+              <option value="Concordia">Concordia University</option>
+              <option value="UQAM">Université du Québec à Montréal</option>
+              <option value="UManitoba">University of Manitoba</option>
+              <option value="USask">University of Saskatchewan</option>
+              <option value="MUN">Memorial University</option>
+              <option value="Dalhousie">Dalhousie University</option>
+              <option value="UNB">University of New Brunswick</option>
+              <option value="UPEI">University of Prince Edward Island</option>
+              <option value="StFX">St. Francis Xavier University</option>
+              <option value="UVic">University of Victoria</option>
+              <option value="UNBC">University of Northern British Columbia</option>
               <option value="OCAD">OCAD University</option>
             </select>
           </div>

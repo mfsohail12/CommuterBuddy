@@ -13,7 +13,7 @@ function HomePage() {
   const [authMode, setAuthMode] = useState("signin");
   const [addRequestModalOpen, setAddRequestModalOpen] = useState(false);
   const navigate = useNavigate();
-  const route = useRoute();
+  const { route, loading } = useRoute();
 
   useEffect(() => {
     // Get initial session
@@ -105,9 +105,11 @@ function HomePage() {
             <MdEmojiPeople className="text-3xl" />
             Find a Buddy
           </button>
-          {route != null ? (
+          {loading ? (
+            <div className="text-white text-center">Loading...</div>
+          ) : route ? (
             <button
-              onClick={() => {}}
+              onClick={() => navigate("/bus")}
               className="flex justify-center items-center gap-3 text-white hover:text-blue-200 px-3 py-2 rounded-md text-xl font-medium"
             >
               <FaMapMarkedAlt className="text-xl" />
@@ -115,7 +117,7 @@ function HomePage() {
             </button>
           ) : (
             <button
-              onClick={() => setAddRequestModalOpen(true)}
+              onClick={() => navigate("/bus")}
               className="flex justify-center items-center gap-3 text-white hover:text-blue-200 px-3 py-2 rounded-md text-xl font-medium"
             >
               <FaMapMarkedAlt className="text-xl" />
