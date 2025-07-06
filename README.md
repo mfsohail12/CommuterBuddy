@@ -97,8 +97,8 @@ npm run build
 
 ## Last but not least - Team 💻:
 
-- **[Shihab](https://github.com/shihabhasan0161) – The Map Magician**  
-  Led project scaffolding and frontend work: conjured our Leaflet-based map UI, squashed bugs across the app, and tamed Supabase for auth & data storage.
+- I, **[Shihab](https://github.com/shihabhasan0161) – The Map Magician**  
+  I led project scaffolding and frontend work, including creating our Leaflet-based map UI, squashing bugs across the app, and implementing Supabase for authentication and database.
 
 - **[Sam](https://github.com/FadedBronze) – The Linux Guy**  
   Engineered our real-time chat and kept the backend shipshape: wrote core socket logic, reviewed—and vanquished—bugs throughout the codebase.
