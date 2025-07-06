@@ -8,6 +8,8 @@ CommuterBuddy helps university students find travel companions with matching rou
 
 ![alt](/public/hp.png)
 
+[Live View](https://commuterbuddy.netlify.app/)
+
 ## Page Functionality
 
 ### HomePage
