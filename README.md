@@ -1,124 +1,98 @@
-# Commuter Buddy React App
+# CommuterBuddy 🚌
 
-A React application that helps users find commute companions through a simple five-step navigation flow.
+**A community-driven platform connecting university students and commuters who share similar routes for safer, more social, and sustainable travel.**
+
+## Project Overview
+
+CommuterBuddy helps university students find travel companions with matching routes and schedules, enabling safer commutes, reduced costs, and environmental benefits through shared transportation.
+
+## Page Functionality
+
+### HomePage
+- **Find a Buddy**: Navigate to university selection
+- **Add/Update Your Route**: Manage personal commute details
+- **Sign In/Up**: User authentication
+
+### UniversitySelectPage
+- Select from 26+ Canadian universities
+- **Next Button**: Proceed to transit selection
+
+### TransitSelectPage
+- Browse available commute options
+- **Select Options**: Choose travel companions
+- **Next Button**: Connect with selected buddy
+
+### BusPage
+- **Add/Update Route Form**: Enter commute details (name, university, address, transit, time)
+- **Save/Update Route**: Store commute information
+
+### ConnectPage
+- **Confirm Connection**: Finalize travel buddy match
+- View connection details
+
+### MapPage
+- **Interactive Map**: View meeting points and destinations
+- **Real-time Chat**: Communicate with travel companion
+- **Google Maps Integration**: External navigation
 
 ## Features
 
-- **Five-step navigation flow**: Home → University Selection → Transit Selection → Connection → Map
-- **State management**: Data passed between routes using React Router's state
-- **Interactive maps**: Integration with React Leaflet for location display
-- **Responsive design**: Built with Tailwind CSS
-- **Mock data**: Includes sample transit options and user information
+- **Smart Matching**: Find commuters with similar routes
+- **Route Management**: Add/update personal commute details
+- **Real-time Chat**: Safe communication with matches
+- **Interactive Maps**: Location sharing and navigation
+- **University Integration**: Support for 26+ Canadian universities
+- **Safety Features**: User verification and secure connections
 
-## Tech Stack
+## Technical Stack
 
-- React 19.1.0 (JavaScript)
-- React Router DOM 7.6.3 for routing
-- Tailwind CSS 4.1.11 for styling
-- React Leaflet 5.0.0 for interactive maps
-- Leaflet 1.9.4 for mapping functionality
+**Frontend:** React.js, Tailwind CSS, React Router, Leaflet Maps, React Icons
+**Backend:** Supabase (PostgreSQL, Auth, Real-time)
+**Deployment:** Netlify
 
-## Getting Started
+## Target Community
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+- University students using public transportation
+- Daily commuters with regular routes
+- Safety-conscious travelers seeking community connections
+- Students looking to reduce transportation costs
 
-## Available Scripts
+## Privacy & Security
 
-In the project directory, you can run:
+- Secure user authentication
+- Row Level Security (RLS) policies
+- Encrypted data storage
+- Controlled access to personal information
 
-### `npm start`
+## Future Enhancements
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- Mobile app development
+- Advanced ML-based matching
+- Real-time transit integration
+- Campus partnerships
+- Gamification features
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Installation & Setup
 
-### `npm test`
+```bash
+# Clone repository
+git clone -b Dev https://github.com/shihabhasan0161/CommuterBuddy.git
+cd CommuterBuddy
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+# Install dependencies
+npm install
 
-### `npm run build`
+# Set up environment variables
+cp .env.example .env
+# Add your Supabase URL and API key
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+# Run development server
+npm start
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+# Build for production
+npm run build
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+---
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-
-## Chat Feature
-
-This app includes a real-time chat feature powered by Flask-SocketIO.
-
-### Setup Chat Server
-
-1. **Install Python dependencies**:
-   ```bash
-   pip install flask flask-cors flask-socketio
-   ```
-   Or use the requirements file:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-2. **Start the chat server**:
-   ```bash
-   python chat_server.py
-   ```
-   The server will run on http://localhost:5000
-
-3. **Start the React app**:
-   ```bash
-   npm start
-   ```
-   The app will run on http://localhost:3000
-
-### Using the Chat
-
-- Navigate through the app flow to reach the Map page
-- Click the green "💬 Chat" button in the bottom-right corner
-- Start chatting with other users in the same room
-- Each buddy connection creates a unique chat room based on the buddy ID
+*Built for Hack404 (July 4-6, 2025) - Connecting communities, one commute at a time* 🚌✨
