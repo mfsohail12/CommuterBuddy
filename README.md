@@ -6,7 +6,7 @@
 
 CommuterBuddy helps university students find travel companions with matching routes and schedules, enabling safer commutes, reduced costs, and environmental benefits through shared transportation.
 
-![alt](/CommuterBuddy/public/hp.png)
+![alt](/public/hp.png)
 
 ## Page Functionality
 
