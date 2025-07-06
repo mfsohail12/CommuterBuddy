@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 import useUser from "../hooks/useUser";
+import useRoute from "../hooks/useRoute";
 
 function TransitSelectPage() {
   const [selectedOption, setSelectedOption] = useState(null);
@@ -11,18 +12,21 @@ function TransitSelectPage() {
   const location = useLocation();
   const { university } = location.state || {};
   const user = useUser();
+  const route = useRoute();
 
   useEffect(() => {
+    if (!user || !route) return;
+
     const loadCommuteOptions = async () => {
       try {
         // Mock data
-        const mockOptions = [
+        const mockRoutes = [
           {
             id: 1,
             userName: "Alice",
             transitNumber: "Bus 29",
             stationAddress: "55 Bloor St W",
-            departureTime: "8:00 AM",
+            departureTime: "08:00:00", // creates Date with current date and time
             lat: 43.6677,
             lng: -79.3948,
             university: "UofT",
@@ -32,7 +36,7 @@ function TransitSelectPage() {
             userName: "Bob",
             transitNumber: "Metro Line 1",
             stationAddress: "St. George Station",
-            departureTime: "8:15 AM",
+            departureTime: "08:15:00",
             lat: 43.6629,
             lng: -79.3957,
             university: "UofT",
@@ -40,17 +44,20 @@ function TransitSelectPage() {
         ];
 
         // Load real data from Supabase
-        const { data: realData, error } = await supabase
+        const { data: routes, error } = await supabase
           .from("commute_requests")
           .select("*")
+          .neq("user_id", user.id)
+          .eq("departure_time", route.departure_time)
+          .eq("bus_number", route.bus_number)
           .order("created_at", { ascending: false });
 
         if (error) {
           console.error("Error loading commute requests:", error);
-          setOptions(mockOptions);
+          setOptions(mockRoutes);
         } else {
           // Transform real data to match expected format
-          const transformedRealData = realData.map((item) => ({
+          const transformedRoutes = routes.map((item) => ({
             id: item.id,
             userName: item.name,
             transitNumber: item.bus_number,
@@ -62,16 +69,25 @@ function TransitSelectPage() {
           }));
 
           // Combine mock data with real data
-          const combinedOptions = [...mockOptions, ...transformedRealData];
+          const combinedRoutes = [...mockRoutes, ...transformedRoutes];
 
           // Filter by university if specified
-          const filteredOptions = university
-            ? combinedOptions.filter(
+          const uniFilteredRoutes = university
+            ? combinedRoutes.filter(
                 (option) => option.university === university
               )
-            : combinedOptions;
+            : combinedRoutes;
 
-          setOptions(filteredOptions);
+          const transitFilteredRoutes = uniFilteredRoutes.filter(
+            (otherRoute) => {
+              return (
+                otherRoute.transitNumber === route.bus_number &&
+                otherRoute.departureTime === route.departure_time
+              );
+            }
+          );
+
+          setOptions(transitFilteredRoutes);
         }
       } catch (error) {
         console.error("Error loading data:", error);
@@ -82,7 +98,7 @@ function TransitSelectPage() {
     };
 
     loadCommuteOptions();
-  }, [university]);
+  }, [university, user?.id, route?.bus_number]);
 
   const handleNext = () => {
     if (selectedOption) {
@@ -129,52 +145,50 @@ function TransitSelectPage() {
           ) : (
             <>
               <div className="space-y-4 mb-8">
-                {options
-                  .filter((option) => option.userName != user.full_name)
-                  .map((option) => (
-                    <div
-                      key={option.id}
-                      onClick={() => setSelectedOption(option)}
-                      className={`p-6 border rounded-lg cursor-pointer transition-all hover:shadow-md ${
-                        selectedOption?.id === option.id
-                          ? "border-blue-500 bg-blue-50"
-                          : "border-gray-200 hover:border-gray-300"
-                      }`}
-                    >
-                      <div className="flex justify-between items-start">
-                        <div className="flex-1">
-                          <h3 className="text-xl font-semibold text-gray-800 mb-2">
-                            {option.userName}
-                          </h3>
-                          <div className="space-y-1 text-gray-600">
+                {options.map((option) => (
+                  <div
+                    key={option.id}
+                    onClick={() => setSelectedOption(option)}
+                    className={`p-6 border rounded-lg cursor-pointer transition-all hover:shadow-md ${
+                      selectedOption?.id === option.id
+                        ? "border-blue-500 bg-blue-50"
+                        : "border-gray-200 hover:border-gray-300"
+                    }`}
+                  >
+                    <div className="flex justify-between items-start">
+                      <div className="flex-1">
+                        <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                          {option.userName}
+                        </h3>
+                        <div className="space-y-1 text-gray-600">
+                          <p>
+                            <strong>Transit:</strong> {option.transitNumber}
+                          </p>
+                          <p>
+                            <strong>Station:</strong> {option.stationAddress}
+                          </p>
+                          <p>
+                            <strong>Departure:</strong> {option.departureTime}
+                          </p>
+                          {option.university && (
                             <p>
-                              <strong>Transit:</strong> {option.transitNumber}
+                              <strong>University:</strong> {option.university}
                             </p>
-                            <p>
-                              <strong>Station:</strong> {option.stationAddress}
-                            </p>
-                            <p>
-                              <strong>Departure:</strong> {option.departureTime}
-                            </p>
-                            {option.university && (
-                              <p>
-                                <strong>University:</strong> {option.university}
-                              </p>
-                            )}
-                          </div>
-                        </div>
-                        <div className="ml-4">
-                          <input
-                            type="radio"
-                            name="transit"
-                            checked={selectedOption?.id === option.id}
-                            onChange={() => setSelectedOption(option)}
-                            className="w-4 h-4 text-blue-600"
-                          />
+                          )}
                         </div>
                       </div>
+                      <div className="ml-4">
+                        <input
+                          type="radio"
+                          name="transit"
+                          checked={selectedOption?.id === option.id}
+                          onChange={() => setSelectedOption(option)}
+                          className="w-4 h-4 text-blue-600"
+                        />
+                      </div>
                     </div>
-                  ))}
+                  </div>
+                ))}
               </div>
 
               <button

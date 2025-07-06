@@ -1,17 +1,19 @@
-import React, { useState } from 'react';
-import { supabase } from '../lib/supabase';
+import React, { useState } from "react";
+import { supabase } from "../lib/supabase";
+import { useNavigate } from "react-router-dom";
 
 export default function AuthModal({ isOpen, onClose, mode, onSuccess }) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleSignUp = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError('');
+    setError("");
 
     try {
       const { data, error } = await supabase.auth.signUp({
@@ -40,7 +42,7 @@ export default function AuthModal({ isOpen, onClose, mode, onSuccess }) {
   const handleSignIn = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError('');
+    setError("");
 
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
@@ -59,6 +61,8 @@ export default function AuthModal({ isOpen, onClose, mode, onSuccess }) {
     } finally {
       setLoading(false);
     }
+
+    navigate("/");
   };
 
   if (!isOpen) return null;
@@ -68,7 +72,7 @@ export default function AuthModal({ isOpen, onClose, mode, onSuccess }) {
       <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold">
-            {mode === 'signup' ? "Let's get you started" : 'Welcome Back'}
+            {mode === "signup" ? "Let's get you started" : "Welcome Back"}
           </h2>
           <button
             onClick={onClose}
@@ -79,11 +83,11 @@ export default function AuthModal({ isOpen, onClose, mode, onSuccess }) {
         </div>
 
         <p className="text-gray-600 mb-6">
-          {mode === 'signup' ? 'Create your account' : 'Login to your account'}
+          {mode === "signup" ? "Create your account" : "Login to your account"}
         </p>
 
-        <form onSubmit={mode === 'signup' ? handleSignUp : handleSignIn}>
-          {mode === 'signup' && (
+        <form onSubmit={mode === "signup" ? handleSignUp : handleSignIn}>
+          {mode === "signup" && (
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Name
@@ -138,22 +142,24 @@ export default function AuthModal({ isOpen, onClose, mode, onSuccess }) {
             disabled={loading}
             className="w-full bg-gray-800 text-white py-2 px-4 rounded-lg hover:bg-gray-900 disabled:opacity-50"
           >
-            {loading ? 'Loading...' : mode === 'signup' ? 'Sign Up' : 'Sign In'}
+            {loading ? "Loading..." : mode === "signup" ? "Sign Up" : "Sign In"}
           </button>
         </form>
 
         <div className="mt-6 text-center">
           <p className="text-gray-600">
-            {mode === 'signup' ? 'Already have an account?' : "Don't have an account?"}{' '}
+            {mode === "signup"
+              ? "Already have an account?"
+              : "Don't have an account?"}{" "}
             <button
               onClick={() => {
-                setError('');
+                setError("");
                 onClose();
                 // This would trigger the parent to switch modes
               }}
               className="text-blue-600 hover:underline"
             >
-              {mode === 'signup' ? 'Sign In' : 'Sign Up'}
+              {mode === "signup" ? "Sign In" : "Sign Up"}
             </button>
           </p>
         </div>

@@ -10,9 +10,7 @@ const useUser = () => {
     });
   }, []);
 
-  console.log(user);
-
-  return user?.user_metadata;
+  return { ...user?.user_metadata, id: user?.id };
 };
 
 export default useUser;
