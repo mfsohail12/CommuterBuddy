@@ -59,7 +59,6 @@ CommuterBuddy helps university students find travel companions with matching rou
 - University students using public transportation
 - Daily commuters with regular routes
 - Safety-conscious travelers seeking community connections
-- Students looking to reduce transportation costs
 
 ## Privacy & Security
 
@@ -70,6 +69,7 @@ CommuterBuddy helps university students find travel companions with matching rou
 
 ## Future Enhancements
 
+- University Single Sign-On (SSO)
 - Mobile app development
 - Advanced ML-based matching
 - Real-time transit integration
