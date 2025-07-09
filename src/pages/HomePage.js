@@ -3,17 +3,33 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 import { MdEmojiPeople } from "react-icons/md";
 import { FaMapMarkedAlt } from "react-icons/fa";
+import { motion } from "motion/react";
+import toast from "react-hot-toast";
 import AuthModal from "../components/AuthModal";
 import AddRequestModal from "../components/AddRequestModal";
 import useRoute from "../hooks/useRoute";
 
 function HomePage() {
+  const fullText = "Find your perfect commute companion!";
+  const [displayedText, setDisplayedText] = useState("");
   const [user, setUser] = useState(null);
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [authMode, setAuthMode] = useState("signin");
   const [addRequestModalOpen, setAddRequestModalOpen] = useState(false);
   const navigate = useNavigate();
   const { route, loading } = useRoute();
+
+  // typewriter effect for text
+  useEffect(() => {
+    let index = 0;
+    const interval = setInterval(() => {
+      setDisplayedText(fullText.slice(0, index + 1));
+      index++;
+      if (index === fullText.length) clearInterval(interval);
+    }, 40);
+
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     // Get initial session
@@ -32,7 +48,11 @@ function HomePage() {
   }, []);
 
   const handleGoClick = () => {
-    navigate("/university");
+    if (user && route) navigate("/university");
+    else if (user) {
+      navigate("/bus");
+      toast.error("You must add a route first");
+    } else openAuthModal("signin");
   };
 
   const handleSignOut = async () => {
@@ -94,35 +114,58 @@ function HomePage() {
         style={{ height: "calc(100vh - 4rem)" }}
       >
         <div className="flex flex-col justify-center items-center">
-          <img alt="Commuter Buddy" src="/Logo.webp" className="scale-125 -my-10 -mb-20 -ml-22 -mr-26" />
-          <p className="text-xl text-white mb-12">
-            Find your perfect commute companion
-          </p>
-          <button
+          <motion.img
+            alt="Commuter Buddy"
+            src="/Logo.png"
+            className="mb-4"
+            initial={{ x: "-50%", opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{
+              type: "spring",
+              stiffness: 100,
+              damping: 10,
+            }}
+          />
+          <motion.p
+            className="text-xl text-white mb-10"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            {displayedText}
+          </motion.p>
+          <motion.button
             onClick={handleGoClick}
             className="flex justify-center items-center gap-2 bg-white relative z-20 text-blue-600 px-16 py-6 rounded-full text-2xl font-semibold hover:bg-gray-100 transition-colors shadow-lg mb-4"
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.8 }}
           >
             <MdEmojiPeople className="text-3xl" />
             Find a Buddy
-          </button>
+          </motion.button>
           {loading ? (
             <div className="text-white text-center">Loading...</div>
-          ) : route ? (
-            <button
-              onClick={() => navigate("/bus")}
-              className="flex justify-center items-center gap-3 text-white hover:text-blue-200 px-3 py-2 rounded-md text-xl font-medium"
-            >
-              <FaMapMarkedAlt className="text-xl" />
-              Update Your Route
-            </button>
           ) : (
-            <button
-              onClick={() => navigate("/bus")}
-              className="flex justify-center items-center gap-3 text-white hover:text-blue-200 px-3 py-2 rounded-md text-xl font-medium"
-            >
-              <FaMapMarkedAlt className="text-xl" />
-              Add Your Route
-            </button>
+            user &&
+            (route ? (
+              <button
+                onClick={() => navigate("/bus")}
+                className="flex justify-center items-center gap-3 text-white hover:text-blue-200 px-3 py-2 rounded-md text-xl font-medium"
+              >
+                <FaMapMarkedAlt className="text-xl" />
+                Update Your Route
+              </button>
+            ) : (
+              <button
+                onClick={() => navigate("/bus")}
+                className="flex justify-center items-center gap-3 text-white hover:text-blue-200 px-3 py-2 rounded-md text-xl font-medium"
+              >
+                <FaMapMarkedAlt className="text-xl" />
+                Add Your Route
+              </button>
+            ))
           )}
         </div>
       </div>
@@ -132,9 +175,11 @@ function HomePage() {
         isOpen={authModalOpen}
         onClose={() => setAuthModalOpen(false)}
         mode={authMode}
+        setMode={setAuthMode}
         onSuccess={() => {
           setAuthModalOpen(false);
-          // Optionally show success message
+          if (authMode === "signup")
+            toast.success(`A verification email was sent to your account`);
         }}
       />
 

@@ -2,7 +2,13 @@ import React, { useState } from "react";
 import { supabase } from "../lib/supabase";
 import { useNavigate } from "react-router-dom";
 
-export default function AuthModal({ isOpen, onClose, mode, onSuccess }) {
+export default function AuthModal({
+  isOpen,
+  onClose,
+  mode,
+  setMode,
+  onSuccess,
+}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -154,8 +160,9 @@ export default function AuthModal({ isOpen, onClose, mode, onSuccess }) {
             <button
               onClick={() => {
                 setError("");
-                onClose();
-                // This would trigger the parent to switch modes
+                setMode((prevMode) =>
+                  prevMode === "signin" ? "signup" : "signin"
+                );
               }}
               className="text-blue-600 hover:underline"
             >
