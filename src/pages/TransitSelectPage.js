@@ -73,6 +73,7 @@ function TransitSelectPage() {
           .from("commute_requests")
           .select("*")
           .neq("user_id", user.id)
+          .eq("university", university)
           .order("created_at", { ascending: false });
 
         if (error) {
@@ -94,34 +95,7 @@ function TransitSelectPage() {
           // Combine mock data with real data
           const combinedRoutes = [...mockRoutes, ...transformedRoutes];
 
-          // Filter by university if specified
-          const uniFilteredRoutes = university
-            ? combinedRoutes.filter(
-                (option) => option.university === university
-              )
-            : combinedRoutes;
-
-          // Try to find exact matches first (same route and time)
-          const exactMatches = uniFilteredRoutes.filter((otherRoute) => {
-            return (
-              otherRoute.transitNumber === route.bus_number &&
-              otherRoute.departureTime === route.departure_time
-            );
-          });
-
-          // If no exact matches, show routes with same transit number
-          const transitMatches =
-            exactMatches.length > 0
-              ? exactMatches
-              : uniFilteredRoutes.filter((otherRoute) => {
-                  return otherRoute.transitNumber === route.bus_number;
-                });
-
-          // If still no matches, show all routes for the same university
-          const finalOptions =
-            transitMatches.length > 0 ? transitMatches : uniFilteredRoutes;
-
-          setOptions(finalOptions);
+          setOptions(combinedRoutes);
         }
       } catch (error) {
         console.error("Error loading data:", error);

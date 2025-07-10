@@ -4,14 +4,19 @@ import { supabase } from "../lib/supabase";
 import useRoute from "../hooks/useRoute";
 import useUser from "../hooks/useUser";
 import { FaArrowLeftLong } from "react-icons/fa6";
+import { FaLocationDot } from "react-icons/fa6";
 
 function BusPage() {
   const [formData, setFormData] = useState({
     university: "",
     universityAddress: "",
+    lat: "",
+    long: "",
     busNumber: "",
     departureTime: "",
   });
+  const [suggestions, setSuggestions] = useState([]);
+  const [typingTimeout, setTypingTimeout] = useState(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
@@ -72,6 +77,13 @@ function BusPage() {
         throw new Error("You must be logged in to manage your route");
       }
 
+      // check if all form data is present
+      for (let key in formData) {
+        if (formData[key] === "") {
+          throw new Error("Missing data " + key);
+        }
+      }
+
       console.log(`${isUpdating ? "Updating" : "Creating"} route:`, {
         ...formData,
         name: user.full_name,
@@ -86,8 +98,8 @@ function BusPage() {
             university_address: formData.universityAddress,
             bus_number: formData.busNumber,
             departure_time: formData.departureTime,
-            latitude: 43.6532, // Default Toronto coordinates
-            longitude: -79.3832,
+            latitude: formData.lat,
+            longitude: formData.long,
           })
           .eq("id", route.id)
           .eq("user_id", user.id);
@@ -108,8 +120,8 @@ function BusPage() {
             university_address: formData.universityAddress,
             bus_number: formData.busNumber,
             departure_time: formData.departureTime,
-            latitude: 43.6532, // Default Toronto coordinates
-            longitude: -79.3832,
+            latitude: formData.lat,
+            longitude: formData.long,
           },
         ]);
 
@@ -130,6 +142,55 @@ function BusPage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleAddressChange = async (e) => {
+    const query = e.target.value;
+    setFormData({
+      ...formData,
+      universityAddress: query,
+      lat: "", // reset lat and long since new address is being typed in
+      long: "",
+    });
+
+    if (query.length < 3) return;
+
+    if (typingTimeout) {
+      clearTimeout(typingTimeout);
+    }
+
+    setTypingTimeout(
+      setTimeout(() => {
+        fetchSuggestions(query);
+      }, 500)
+    );
+  };
+
+  const fetchSuggestions = async (query) => {
+    try {
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+          query
+        )}`
+      );
+      const result = await response.json();
+
+      console.log(result);
+
+      if (result.length > 3) {
+        setSuggestions(result.slice(0, 3));
+      } else {
+        setSuggestions(result);
+      }
+    } catch (error) {
+      console.log("Error fetching address suggestions: ", error);
+      setError("There was an error fetching address suggestions: " + error);
+    }
+  };
+
+  const formatDisplayName = (name) => {
+    const parts = name.split(",");
+    return parts.slice(0, 3).join(",").trim();
   };
 
   if (routeLoading) {
@@ -205,15 +266,34 @@ function BusPage() {
                   type="text"
                   required
                   value={formData.universityAddress}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      universityAddress: e.target.value,
-                    })
-                  }
+                  onChange={handleAddressChange}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
                   placeholder="e.g., 27 King's College Circle, Toronto"
                 />
+                <div>
+                  {suggestions.map((suggestion, index) => (
+                    <button
+                      key={index}
+                      className="py-1 px-3 hover:bg-slate-200 flex gap-3 items-center w-full"
+                      onClick={() => {
+                        setFormData({
+                          ...formData,
+                          universityAddress: formatDisplayName(
+                            suggestion.display_name
+                          ),
+                          lat: suggestion.lat,
+                          long: suggestion.lon,
+                        });
+                        setSuggestions([]);
+                      }}
+                    >
+                      <FaLocationDot className="text-md" />
+                      <p className="text-sm text-left">
+                        {formatDisplayName(suggestion.display_name)}
+                      </p>
+                    </button>
+                  ))}
+                </div>
               </div>
 
               <div className="mb-4">
