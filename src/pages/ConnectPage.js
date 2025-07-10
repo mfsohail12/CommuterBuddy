@@ -10,7 +10,7 @@ function ConnectPage() {
 
   const handleConfirm = () => {
     if (buddy) {
-      toast.success(`Connection request sent to ${buddy.userName}`);
+      toast.success(`A connection request was sent to ${buddy.userName}!`);
       navigate("/map", { state: { buddy } });
     }
   };
@@ -20,7 +20,7 @@ function ConnectPage() {
       <div className="min-h-screen bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
         <button
           className="absolute top-9 left-6 flex justify-center items-center gap-3 text-white"
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/transit")}
         >
           <FaArrowLeftLong className="text-lg" />
           <p className="font-bold text-md">Go back</p>
@@ -44,7 +44,7 @@ function ConnectPage() {
     <div className="min-h-screen bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
       <button
         className="absolute top-9 left-6 flex justify-center items-center gap-3 text-white"
-        onClick={() => navigate("/")}
+        onClick={() => navigate("/transit")}
       >
         <FaArrowLeftLong className="text-lg" />
         <p className="font-bold text-md">Go back</p>
@@ -52,7 +52,7 @@ function ConnectPage() {
       <div className="max-w-md w-full mx-4">
         <div className="bg-white rounded-lg shadow-lg p-8">
           <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
-            Connect with Buddy
+            Connect With {buddy.userName}
           </h2>
 
           <div className="bg-blue-50 rounded-lg p-6 mb-8">
@@ -60,9 +60,6 @@ function ConnectPage() {
               Connection Details
             </h3>
             <div className="space-y-2 text-gray-600">
-              <p>
-                <strong>Buddy:</strong> {buddy.userName}
-              </p>
               <p>
                 <strong>Transit:</strong> {buddy.transitNumber}
               </p>
@@ -78,9 +75,8 @@ function ConnectPage() {
           <div className="text-center mb-8">
             <p className="text-lg text-gray-700">
               Connect with <strong>{buddy.userName}</strong> on{" "}
-              <strong>{buddy.transitNumber}</strong> departing{" "}
-              <strong>{buddy.departureTime}</strong> from{" "}
-              <strong>{buddy.stationAddress}</strong>
+              <strong>{buddy.transitNumber}</strong> departing at{" "}
+              <strong>{buddy.departureTime.substring(0, 5)}</strong>
             </p>
           </div>
 
@@ -88,7 +84,7 @@ function ConnectPage() {
             onClick={handleConfirm}
             className="w-full bg-green-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-green-700 transition-colors"
           >
-            Confirm Connection
+            Connect
           </button>
         </div>
       </div>

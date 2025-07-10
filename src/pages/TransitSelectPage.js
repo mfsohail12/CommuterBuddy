@@ -123,7 +123,7 @@ function TransitSelectPage() {
       <div className="min-h-screen bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
         <button
           className="absolute top-9 left-6 flex justify-center items-center gap-3 text-white"
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/university")}
         >
           <FaArrowLeftLong className="text-lg" />
           <p className="font-bold text-md">Go back</p>
@@ -140,7 +140,7 @@ function TransitSelectPage() {
     <div className="min-h-screen bg-gradient-to-br from-blue-500 to-purple-600 py-8">
       <button
         className="absolute top-9 left-6 flex justify-center items-center gap-3 text-white"
-        onClick={() => navigate("/")}
+        onClick={() => navigate("/university")}
       >
         <FaArrowLeftLong className="text-lg" />
         <p className="font-bold text-md">Go back</p>
