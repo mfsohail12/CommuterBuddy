@@ -11,7 +11,8 @@ export default function AuthModal({
 }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -26,18 +27,29 @@ export default function AuthModal({
         email,
         password,
         options: {
-          data: {
-            full_name: name,
-          },
+          data: { full_name: firstName },
         },
       });
 
       if (error) throw error;
 
-      if (data.user) {
-        onSuccess();
-        onClose();
-      }
+      const userId = data.user?.id;
+
+      if (!userId) throw new Error("User is not authenticated");
+
+      const res = await supabase.from("users").insert([
+        {
+          id: userId,
+          first_name: firstName,
+          last_name: lastName,
+          email,
+        },
+      ]);
+
+      if (res.error) throw res.error;
+
+      onSuccess();
+      onClose();
     } catch (error) {
       setError(error.message);
     } finally {
@@ -96,15 +108,26 @@ export default function AuthModal({
           {mode === "signup" && (
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Name
+                First Name
               </label>
               <input
                 type="text"
                 required
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-                placeholder="John Doe"
+                placeholder="John"
+              />
+              <label className="block text-sm font-medium text-gray-700 my-4">
+                Last Name
+              </label>
+              <input
+                type="text"
+                required
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                placeholder="Doe"
               />
             </div>
           )}

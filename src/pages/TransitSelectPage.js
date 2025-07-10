@@ -16,36 +16,36 @@ function TransitSelectPage() {
   const { route, loading: routeLoading } = useRoute();
 
   const universities = [
-    { id: 'UofT', name: 'University of Toronto' },
-    { id: 'York', name: 'York University' },
-    { id: 'TMU', name: 'Toronto Metropolitan University' },
-    { id: 'UBC', name: 'University of British Columbia' },
-    { id: 'McGill', name: 'McGill University' },
-    { id: 'UWaterloo', name: 'University of Waterloo' },
-    { id: 'McMaster', name: 'McMaster University' },
-    { id: 'Queens', name: 'Queen\'s University' },
-    { id: 'Western', name: 'Western University' },
-    { id: 'UAlberta', name: 'University of Alberta' },
-    { id: 'UCalgary', name: 'University of Calgary' },
-    { id: 'UOttawa', name: 'University of Ottawa' },
-    { id: 'Carleton', name: 'Carleton University' },
-    { id: 'SFU', name: 'Simon Fraser University' },
-    { id: 'Concordia', name: 'Concordia University' },
-    { id: 'UQAM', name: 'Université du Québec à Montréal' },
-    { id: 'UManitoba', name: 'University of Manitoba' },
-    { id: 'USask', name: 'University of Saskatchewan' },
-    { id: 'MUN', name: 'Memorial University' },
-    { id: 'Dalhousie', name: 'Dalhousie University' },
-    { id: 'UNB', name: 'University of New Brunswick' },
-    { id: 'UPEI', name: 'University of Prince Edward Island' },
-    { id: 'StFX', name: 'St. Francis Xavier University' },
-    { id: 'UVic', name: 'University of Victoria' },
-    { id: 'UNBC', name: 'University of Northern British Columbia' },
-    { id: 'OCAD', name: 'OCAD University' }
+    { id: "UofT", name: "University of Toronto" },
+    { id: "York", name: "York University" },
+    { id: "TMU", name: "Toronto Metropolitan University" },
+    { id: "UBC", name: "University of British Columbia" },
+    { id: "McGill", name: "McGill University" },
+    { id: "UWaterloo", name: "University of Waterloo" },
+    { id: "McMaster", name: "McMaster University" },
+    { id: "Queens", name: "Queen's University" },
+    { id: "Western", name: "Western University" },
+    { id: "UAlberta", name: "University of Alberta" },
+    { id: "UCalgary", name: "University of Calgary" },
+    { id: "UOttawa", name: "University of Ottawa" },
+    { id: "Carleton", name: "Carleton University" },
+    { id: "SFU", name: "Simon Fraser University" },
+    { id: "Concordia", name: "Concordia University" },
+    { id: "UQAM", name: "Université du Québec à Montréal" },
+    { id: "UManitoba", name: "University of Manitoba" },
+    { id: "USask", name: "University of Saskatchewan" },
+    { id: "MUN", name: "Memorial University" },
+    { id: "Dalhousie", name: "Dalhousie University" },
+    { id: "UNB", name: "University of New Brunswick" },
+    { id: "UPEI", name: "University of Prince Edward Island" },
+    { id: "StFX", name: "St. Francis Xavier University" },
+    { id: "UVic", name: "University of Victoria" },
+    { id: "UNBC", name: "University of Northern British Columbia" },
+    { id: "OCAD", name: "OCAD University" },
   ];
 
   const getUniversityName = (universityId) => {
-    const uni = universities.find(u => u.id === universityId);
+    const uni = universities.find((u) => u.id === universityId);
     return uni ? uni.name : universityId;
   };
 
@@ -57,7 +57,7 @@ function TransitSelectPage() {
         // Mock data
         const mockRoutes = [
           {
-            id: 1,
+            id: -1,
             userName: "Alice",
             transitNumber: "Bus 29",
             stationAddress: "55 Bloor St W",
@@ -102,24 +102,24 @@ function TransitSelectPage() {
             : combinedRoutes;
 
           // Try to find exact matches first (same route and time)
-          const exactMatches = uniFilteredRoutes.filter(
-            (otherRoute) => {
-              return (
-                otherRoute.transitNumber === route.bus_number &&
-                otherRoute.departureTime === route.departure_time
-              );
-            }
-          );
+          const exactMatches = uniFilteredRoutes.filter((otherRoute) => {
+            return (
+              otherRoute.transitNumber === route.bus_number &&
+              otherRoute.departureTime === route.departure_time
+            );
+          });
 
           // If no exact matches, show routes with same transit number
-          const transitMatches = exactMatches.length > 0 ? exactMatches : uniFilteredRoutes.filter(
-            (otherRoute) => {
-              return otherRoute.transitNumber === route.bus_number;
-            }
-          );
+          const transitMatches =
+            exactMatches.length > 0
+              ? exactMatches
+              : uniFilteredRoutes.filter((otherRoute) => {
+                  return otherRoute.transitNumber === route.bus_number;
+                });
 
           // If still no matches, show all routes for the same university
-          const finalOptions = transitMatches.length > 0 ? transitMatches : uniFilteredRoutes;
+          const finalOptions =
+            transitMatches.length > 0 ? transitMatches : uniFilteredRoutes;
 
           setOptions(finalOptions);
         }
@@ -213,14 +213,16 @@ function TransitSelectPage() {
                             <strong>Transit:</strong> {option.transitNumber}
                           </p>
                           <p>
-                            <strong>Destination:</strong> {option.stationAddress}
+                            <strong>Destination:</strong>{" "}
+                            {option.stationAddress}
                           </p>
                           <p>
                             <strong>Departure:</strong> {option.departureTime}
                           </p>
                           {option.university && (
                             <p>
-                              <strong>University:</strong> {getUniversityName(option.university)}
+                              <strong>University:</strong>{" "}
+                              {getUniversityName(option.university)}
                             </p>
                           )}
                         </div>

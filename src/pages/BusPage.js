@@ -1,14 +1,12 @@
-// src/pages/BusPage.js
-
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 import useRoute from "../hooks/useRoute";
+import useUser from "../hooks/useUser";
 import { FaArrowLeftLong } from "react-icons/fa6";
 
 function BusPage() {
   const [formData, setFormData] = useState({
-    name: "",
     university: "",
     universityAddress: "",
     busNumber: "",
@@ -16,10 +14,10 @@ function BusPage() {
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState(null);
   const [isUpdating, setIsUpdating] = useState(false);
   const navigate = useNavigate();
   const { route, loading: routeLoading } = useRoute();
+  const user = useUser();
 
   const universities = [
     { id: "UofT", name: "University of Toronto" },
@@ -50,23 +48,6 @@ function BusPage() {
     { id: "OCAD", name: "OCAD University" },
   ];
 
-  // Check if user is logged in
-  useEffect(() => {
-    const getUser = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      setUser(user);
-
-      if (!user) {
-        setError("Please log in to manage your route");
-        return;
-      }
-    };
-
-    getUser();
-  }, []);
-
   // Pre-fill form if user has an existing route
   useEffect(() => {
     if (route && !routeLoading) {
@@ -91,14 +72,16 @@ function BusPage() {
         throw new Error("You must be logged in to manage your route");
       }
 
-      console.log(`${isUpdating ? "Updating" : "Creating"} route:`, formData);
+      console.log(`${isUpdating ? "Updating" : "Creating"} route:`, {
+        ...formData,
+        name: user.full_name,
+      });
 
       if (isUpdating && route) {
         // Update existing route
         const { data, error } = await supabase
           .from("commute_requests")
           .update({
-            name: formData.name,
             university: formData.university,
             university_address: formData.universityAddress,
             bus_number: formData.busNumber,
@@ -120,7 +103,7 @@ function BusPage() {
         const { data, error } = await supabase.from("commute_requests").insert([
           {
             user_id: user.id,
-            name: formData.name,
+            name: user.full_name,
             university: formData.university,
             university_address: formData.universityAddress,
             bus_number: formData.busNumber,
@@ -193,22 +176,6 @@ function BusPage() {
             )}
 
             <form onSubmit={handleSubmit}>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Your Name
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={formData.name}
-                  onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
-                  }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-                  placeholder="Enter your name"
-                />
-              </div>
-
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   University
