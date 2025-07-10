@@ -4,6 +4,10 @@ import { supabase } from "../lib/supabase";
 import useUser from "../hooks/useUser";
 import useRoute from "../hooks/useRoute";
 import { FaArrowLeftLong } from "react-icons/fa6";
+import { FaTrainSubway } from "react-icons/fa6";
+import { FaClock } from "react-icons/fa";
+import { FaLocationDot } from "react-icons/fa6";
+import { FaUniversity } from "react-icons/fa";
 
 function TransitSelectPage() {
   const [selectedOption, setSelectedOption] = useState(null);
@@ -144,7 +148,7 @@ function TransitSelectPage() {
       <div className="max-w-2xl mx-auto px-4">
         <div className="bg-white rounded-lg shadow-lg p-8">
           <h2 className="text-3xl font-bold text-gray-800 mb-2 text-center">
-            Select Transit Option
+            Choose Someone to Connect With
           </h2>
           <p className="text-gray-600 mb-8 text-center">
             {university
@@ -182,21 +186,37 @@ function TransitSelectPage() {
                         <h3 className="text-xl font-semibold text-gray-800 mb-2">
                           {option.userName}
                         </h3>
-                        <div className="space-y-1 text-gray-600">
-                          <p>
-                            <strong>Transit:</strong> {option.transitNumber}
+                        <div className="space-y-1 text-gray-600 flex flex-col items-start">
+                          <p className="flex justify-center items-center gap-4">
+                            <FaTrainSubway />
+                            <span>
+                              <strong>Transit:</strong> {option.transitNumber}
+                            </span>
                           </p>
-                          <p>
-                            <strong>Destination:</strong>{" "}
-                            {option.stationAddress}
+                          <p className="flex justify-center items-center gap-4">
+                            <FaLocationDot />
+                            <span>
+                              <strong>Destination:</strong>{" "}
+                              {option.stationAddress.length < 40
+                                ? option.stationAddress
+                                : option.stationAddress
+                                    .substring(0, 40)
+                                    .trim() + " ..."}
+                            </span>
                           </p>
-                          <p>
-                            <strong>Departure:</strong> {option.departureTime}
+                          <p className="flex justify-center items-center gap-4">
+                            <FaClock />
+                            <span>
+                              <strong>Departure:</strong> {option.departureTime}
+                            </span>
                           </p>
                           {option.university && (
-                            <p>
-                              <strong>University:</strong>{" "}
-                              {getUniversityName(option.university)}
+                            <p className="flex justify-center items-center gap-4">
+                              <FaUniversity />
+                              <span>
+                                <strong>University:</strong>{" "}
+                                {getUniversityName(option.university)}
+                              </span>
                             </p>
                           )}
                         </div>
