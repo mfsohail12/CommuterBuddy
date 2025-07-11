@@ -12,6 +12,7 @@ import { FaExternalLinkAlt } from "react-icons/fa";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import RealtimeChat from "../components/RealtimeChat";
+import useRoute from "../hooks/useRoute.js";
 
 // Fix for default markers in react-leaflet
 delete L.Icon.Default.prototype._getIconUrl;
@@ -44,6 +45,7 @@ function MapPage() {
   }
   const [chatOpen, setChatOpen] = useState(false);
   const [user, setUser] = useState(null);
+  const { route } = useRoute();
 
   useEffect(() => {
     // Get current user
@@ -172,7 +174,7 @@ function MapPage() {
       {/* Chat Side Panel */}
       {chatOpen && user && (
         <RealtimeChat
-          roomName={`buddy-${buddy.id}`}
+          roomName={`buddy-${buddy.id < route.id ? buddy.id : route.id}`}
           onClose={() => setChatOpen(false)}
         />
       )}

@@ -1,23 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { supabase } from '../lib/supabase';
+import React, { useState, useEffect, useRef } from "react";
+import { supabase } from "../lib/supabase";
+import useUser from "../hooks/useUser";
 
 export default function RealtimeChat({ roomName, onClose }) {
   const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState('');
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef(null);
-
-  useEffect(() => {
-    // Get current user
-    const getCurrentUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      setUser(user);
-      setLoading(false);
-    };
-
-    getCurrentUser();
-  }, []);
+  const user = useUser();
 
   useEffect(() => {
     if (!user) return;
@@ -26,18 +16,18 @@ export default function RealtimeChat({ roomName, onClose }) {
     const loadMessages = async () => {
       try {
         const { data, error } = await supabase
-          .from('chat_messages')
-          .select('*')
-          .eq('room_id', roomName)
-          .order('created_at', { ascending: true });
+          .from("chat_messages")
+          .select("*")
+          .eq("room_id", roomName)
+          .order("created_at", { ascending: true });
 
         if (error) {
-          console.error('Error loading messages:', error);
+          console.error("Error loading messages:", error);
         } else {
           setMessages(data || []);
         }
       } catch (error) {
-        console.error('Error loading messages:', error);
+        console.error("Error loading messages:", error);
       }
     };
 
@@ -47,15 +37,15 @@ export default function RealtimeChat({ roomName, onClose }) {
     const channel = supabase
       .channel(`room-${roomName}`)
       .on(
-        'postgres_changes',
+        "postgres_changes",
         {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'chat_messages',
+          event: "INSERT",
+          schema: "public",
+          table: "chat_messages",
           filter: `room_id=eq.${roomName}`,
         },
         (payload) => {
-          setMessages(current => [...current, payload.new]);
+          setMessages((current) => [...current, payload.new]);
         }
       )
       .subscribe();
@@ -66,46 +56,44 @@ export default function RealtimeChat({ roomName, onClose }) {
   }, [user, roomName]);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   const sendMessage = async () => {
     if (!input.trim() || !user) return;
 
     try {
-      const { error } = await supabase
-        .from('chat_messages')
-        .insert([
-          {
-            room_id: roomName,
-            user_id: user.id,
-            user_name: user.user_metadata?.full_name || user.email,
-            message: input.trim(),
-            created_at: new Date().toISOString()
-          }
-        ]);
+      const { error } = await supabase.from("chat_messages").insert([
+        {
+          room_id: roomName,
+          user_id: user.id,
+          user_name: user.full_name || user.email,
+          message: input.trim(),
+          created_at: new Date().toISOString(),
+        },
+      ]);
 
       if (error) {
-        console.error('Error sending message:', error);
+        console.error("Error sending message:", error);
       } else {
-        setInput('');
+        setInput("");
       }
     } catch (error) {
-      console.error('Error sending message:', error);
+      console.error("Error sending message:", error);
     }
   };
 
   const handleKeyPress = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       sendMessage();
     }
   };
 
   const formatTime = (timestamp) => {
-    return new Date(timestamp).toLocaleTimeString([], { 
-      hour: '2-digit', 
-      minute: '2-digit' 
+    return new Date(timestamp).toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
@@ -122,7 +110,7 @@ export default function RealtimeChat({ roomName, onClose }) {
       <div className="flex items-center justify-center h-full">
         <div className="text-center">
           <p className="text-gray-500 mb-4">Please sign in to use chat</p>
-          <button 
+          <button
             onClick={onClose}
             className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
           >
@@ -157,23 +145,25 @@ export default function RealtimeChat({ roomName, onClose }) {
             <div
               key={message.id}
               className={`flex ${
-                message.user_id === user.id ? 'justify-end' : 'justify-start'
+                message.user_id === user.id ? "justify-end" : "justify-start"
               }`}
             >
               <div
                 className={`max-w-xs px-3 py-2 rounded-lg ${
                   message.user_id === user.id
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-200 text-gray-800'
+                    ? "bg-blue-600 text-white"
+                    : "bg-gray-200 text-gray-800"
                 }`}
               >
                 <div className="text-sm font-medium mb-1">
-                  {message.user_id === user.id ? 'You' : message.user_name}
+                  {message.user_id === user.id ? "You" : message.user_name}
                 </div>
                 <div className="text-sm">{message.message}</div>
                 <div
                   className={`text-xs mt-1 ${
-                    message.user_id === user.id ? 'text-blue-100' : 'text-gray-500'
+                    message.user_id === user.id
+                      ? "text-blue-100"
+                      : "text-gray-500"
                   }`}
                 >
                   {formatTime(message.created_at)}
