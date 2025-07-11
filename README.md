@@ -51,14 +51,14 @@ By turning idle time into meaningful social interaction, CommuterBuddy fosters p
 
 ```bash
 # Clone repository
-git clone -b Dev https://github.com/shihabhasan0161/CommuterBuddy.git
+git clone https://github.com/mfsohail12/CommuterBuddy.git
 cd CommuterBuddy
 
 # Install dependencies
 npm install
 
 # Set up environment variables
-cp .env.example .env
+touch .env
 # Add your Supabase URL and API key
 
 # Run development server
