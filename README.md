@@ -1,43 +1,14 @@
-# CommuterBuddy 🚌
+# CommuterBuddy
 
-**A community-driven platform connecting university students and commuters who share similar routes for safer, more social, and sustainable travel.**
+**A community-driven platform connecting university students and commuters who share similar routes for a more social and safer travel.**
 
 ## Project Overview
 
-CommuterBuddy helps university students find travel companions with matching routes and schedules, enabling safer commutes, reduced costs, and environmental benefits through shared transportation.
+By turning idle time into meaningful social interaction, CommuterBuddy fosters personal connections, enhances mental well-being, and encourages a sense of community during your commutes. CommuterBuddy offers a simple solution: by inputting your regular travel routes and times, the app helps you find others who share similar commutes, giving you the chance to strike up conversations, make new friends, or simply pass the time together. Whether you're looking for a friendly face to chat with on your morning bus, someone to vent to about that never-ending group project, or even a potential study buddy who shares your academic interests, CommuterBuddy turns the everyday grind of commuting into an opportunity for connection and support.
 
-![alt](/public/hp.png)
+![alt](/public/hp.gif)
 
 [Live View](https://commuterbuddy.netlify.app/)
-
-## Page Functionality
-
-### HomePage
-- **Find a Buddy**: Navigate to university selection
-- **Add/Update Your Route**: Manage personal commute details
-- **Sign In/Up**: User authentication
-
-### UniversitySelectPage
-- Select from 26+ Canadian universities
-- **Next Button**: Proceed to transit selection
-
-### TransitSelectPage
-- Browse available commute options
-- **Select Options**: Choose travel companions
-- **Next Button**: Connect with selected buddy
-
-### BusPage
-- **Add/Update Route Form**: Enter commute details (name, university, address, transit, time)
-- **Save/Update Route**: Store commute information
-
-### ConnectPage
-- **Confirm Connection**: Finalize travel buddy match
-- View connection details
-
-### MapPage
-- **Interactive Map**: View meeting points and destinations
-- **Real-time Chat**: Communicate with travel companion
-- **Google Maps Integration**: External navigation
 
 ## Features
 
@@ -97,20 +68,4 @@ npm start
 npm run build
 ```
 
-## Last but not least - Team 💻:
-
-- I, **[Shihab](https://github.com/shihabhasan0161) – The Map Magician**  
-  I led project scaffolding and frontend work, including creating our Leaflet-based map UI, squashing bugs across the app, and implementing Supabase for authentication and database.
-
-- **[Sam](https://github.com/FadedBronze) – The Linux Guy**  
-  Engineered our real-time chat and kept the backend shipshape: wrote core socket logic, reviewed—and vanquished—bugs throughout the codebase.
-
-- **[Muhammad](https://github.com/mfsohail12) – The UX Wizard**  
-  Crafted the map-page experience and key UI tweaks: iterated on layouts, sprinkled design magic, and collaborated closely with the whole squad.
-
-- **[Sakshi](https://github.com/sakshixgoel) – The Logo Maestro**  
-  Forged the product vision and branding: dreamed up the concept, built the request form, and composed our project logo and style guide.
-
----
-
-*Built for Hack404 (July 4-6, 2025) - Connecting communities, one commute at a time* 🚌✨
+_Built for Hack404 (July 4-6, 2025) - Connecting communities, one commute at a time_ 🚌✨
