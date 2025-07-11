@@ -10,7 +10,7 @@ function ConnectPage() {
 
   const handleConfirm = () => {
     if (buddy) {
-      toast.success(`A connection request was sent to ${buddy.userName}!`);
+      toast.success(`A connection request was sent to ${buddy.name}!`);
       navigate("/map", { state: { buddy } });
     }
   };
@@ -52,7 +52,7 @@ function ConnectPage() {
       <div className="max-w-md w-full mx-4">
         <div className="bg-white rounded-lg shadow-lg p-8">
           <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
-            Connect With {buddy.userName}
+            Connect With {buddy.name}
           </h2>
 
           <div className="bg-blue-50 rounded-lg p-6 mb-8">
@@ -61,22 +61,23 @@ function ConnectPage() {
             </h3>
             <div className="space-y-2 text-gray-600">
               <p>
-                <strong>Transit:</strong> {buddy.transitNumber}
+                <strong>Transit:</strong> {buddy.bus_number}
               </p>
               <p>
-                <strong>Departure:</strong> {buddy.departureTime}
+                <strong>Departure:</strong>{" "}
+                {buddy.departure_time.substring(0, 5)}
               </p>
               <p>
-                <strong>Destination:</strong> {buddy.stationAddress}
+                <strong>Destination:</strong> {buddy.university_address}
               </p>
             </div>
           </div>
 
           <div className="text-center mb-8">
             <p className="text-lg text-gray-700">
-              Connect with <strong>{buddy.userName}</strong> on{" "}
-              <strong>{buddy.transitNumber}</strong> departing at{" "}
-              <strong>{buddy.departureTime.substring(0, 5)}</strong>
+              Connect with <strong>{buddy.name}</strong> on{" "}
+              <strong>{buddy.bus_number}</strong> departing at{" "}
+              <strong>{buddy.departure_time.substring(0, 5)}</strong>
             </p>
           </div>
 

@@ -4,10 +4,7 @@ import { supabase } from "../lib/supabase";
 import useUser from "../hooks/useUser";
 import useRoute from "../hooks/useRoute";
 import { FaArrowLeftLong } from "react-icons/fa6";
-import { FaTrainSubway } from "react-icons/fa6";
-import { FaClock } from "react-icons/fa";
-import { FaLocationDot } from "react-icons/fa6";
-import { FaUniversity } from "react-icons/fa";
+import ConnectionCard from "../components/ConnectionCard";
 
 function TransitSelectPage() {
   const [selectedOption, setSelectedOption] = useState(null);
@@ -48,6 +45,130 @@ function TransitSelectPage() {
     { id: "OCAD", name: "OCAD University" },
   ];
 
+  // Mock data
+  const mockRoutes = [
+    {
+      id: -1,
+      name: "Alice",
+      bus_number: "Bus 29",
+      university_address: "55 Bloor St W",
+      departure_time: "08:00",
+      latitude: 43.6677,
+      longitude: -79.3948,
+      university: "UofT",
+    },
+    {
+      id: -2,
+      name: "Brian",
+      bus_number: "Subway 2",
+      university_address: "200 Finch Ave W",
+      departure_time: "09:15",
+      latitude: 43.7824,
+      longitude: -79.4422,
+      university: "UofT",
+    },
+    {
+      id: -3,
+      name: "Chloe",
+      bus_number: "Bus 196",
+      university_address: "4700 Keele St",
+      departure_time: "07:45",
+      latitude: 43.7735,
+      longitude: -79.5019,
+      university: "York",
+    },
+    {
+      id: -4,
+      name: "Daniel",
+      bus_number: "Streetcar 505",
+      university_address: "350 Victoria St",
+      departure_time: "08:30",
+      latitude: 43.6576,
+      longitude: -79.3785,
+      university: "TMU",
+    },
+    {
+      id: -5,
+      name: "Ella",
+      bus_number: "Bus 480",
+      university_address: "2329 West Mall",
+      departure_time: "09:00",
+      latitude: 49.2606,
+      longitude: -123.246,
+      university: "UBC",
+    },
+    {
+      id: -6,
+      name: "Felix",
+      bus_number: "Metro Orange",
+      university_address: "845 Sherbrooke St W",
+      departure_time: "08:20",
+      latitude: 45.5048,
+      longitude: -73.5772,
+      university: "McGill",
+    },
+    {
+      id: -7,
+      name: "Grace",
+      bus_number: "Bus 7",
+      university_address: "200 University Ave W",
+      departure_time: "07:50",
+      latitude: 43.4723,
+      longitude: -80.5449,
+      university: "UWaterloo",
+    },
+    {
+      id: -8,
+      name: "Henry",
+      bus_number: "Bus 51",
+      university_address: "1280 Main St W",
+      departure_time: "09:10",
+      latitude: 43.2609,
+      longitude: -79.9192,
+      university: "McMaster",
+    },
+    {
+      id: -9,
+      name: "Isla",
+      bus_number: "Train VIA 62",
+      university_address: "99 University Ave",
+      departure_time: "08:05",
+      latitude: 44.2253,
+      longitude: -76.4951,
+      university: "Queens",
+    },
+    {
+      id: -10,
+      name: "Jack",
+      bus_number: "Bus 2",
+      university_address: "1151 Richmond St",
+      departure_time: "07:30",
+      latitude: 43.0096,
+      longitude: -81.2737,
+      university: "Western",
+    },
+    {
+      id: -11,
+      name: "Kira",
+      bus_number: "LRT 202",
+      university_address: "2500 University Dr NW",
+      departure_time: "08:40",
+      latitude: 51.078,
+      longitude: -114.1324,
+      university: "UCalgary",
+    },
+    {
+      id: -12,
+      name: "Liam",
+      bus_number: "Bus 94",
+      university_address: "75 Laurier Ave E",
+      departure_time: "09:20",
+      latitude: 45.4231,
+      longitude: -75.6831,
+      university: "UOttawa",
+    },
+  ];
+
   const getUniversityName = (universityId) => {
     const uni = universities.find((u) => u.id === universityId);
     return uni ? uni.name : universityId;
@@ -56,21 +177,25 @@ function TransitSelectPage() {
   useEffect(() => {
     if (!user || !route || routeLoading) return;
 
+    const calculateMatchScore = (option, route) => {
+      let score = 0;
+
+      if (
+        option.bus_number === route.bus_number &&
+        option.departure_time === route.departure_time
+      )
+        score += 2;
+      if (option.bus_number === route.bus_number) score += 1;
+      if (option.university_address === route.university_address) score += 1;
+
+      return score;
+    };
+
     const loadCommuteOptions = async () => {
       try {
-        // Mock data
-        const mockRoutes = [
-          {
-            id: -1,
-            userName: "Alice",
-            transitNumber: "Bus 29",
-            stationAddress: "55 Bloor St W",
-            departureTime: "08:00:00", // creates Date with current date and time
-            lat: 43.6677,
-            lng: -79.3948,
-            university: "UofT",
-          },
-        ];
+        const filterMockRoutes = mockRoutes.filter(
+          (route) => route.university === university
+        );
 
         // Load real data from Supabase
         const { data: routes, error } = await supabase
@@ -82,24 +207,38 @@ function TransitSelectPage() {
 
         if (error) {
           console.error("Error loading commute requests:", error);
-          setOptions(mockRoutes);
+          setOptions(
+            filterMockRoutes.sort((a, b) => {
+              const scoreA = calculateMatchScore(a, route);
+              const scoreB = calculateMatchScore(b, route);
+
+              return scoreB - scoreA;
+            })
+          );
         } else {
           // Transform real data to match expected format
           const transformedRoutes = routes.map((item) => ({
             id: item.id,
-            userName: item.name,
-            transitNumber: item.bus_number,
-            stationAddress: item.university_address,
-            departureTime: item.departure_time,
-            lat: item.latitude,
-            lng: item.longitude,
+            name: item.name,
+            bus_number: item.bus_number,
+            university_address: item.university_address,
+            departure_time: item.departure_time.substring(0, 5),
+            latitude: item.latitude,
+            longitude: item.longitude,
             university: item.university,
           }));
 
           // Combine mock data with real data
-          const combinedRoutes = [...mockRoutes, ...transformedRoutes];
+          const combinedRoutes = [...filterMockRoutes, ...transformedRoutes];
 
-          setOptions(combinedRoutes);
+          setOptions(
+            combinedRoutes.sort((a, b) => {
+              const scoreA = calculateMatchScore(a, route);
+              const scoreB = calculateMatchScore(b, route);
+
+              return scoreB - scoreA;
+            })
+          );
         }
       } catch (error) {
         console.error("Error loading data:", error);
@@ -172,66 +311,12 @@ function TransitSelectPage() {
             <>
               <div className="space-y-4 mb-8">
                 {options.map((option) => (
-                  <div
+                  <ConnectionCard
                     key={option.id}
-                    onClick={() => setSelectedOption(option)}
-                    className={`p-6 border rounded-lg cursor-pointer transition-all hover:shadow-md ${
-                      selectedOption?.id === option.id
-                        ? "border-blue-500 bg-blue-50"
-                        : "border-gray-200 hover:border-gray-300"
-                    }`}
-                  >
-                    <div className="flex justify-between items-start">
-                      <div className="flex-1">
-                        <h3 className="text-xl font-semibold text-gray-800 mb-2">
-                          {option.userName}
-                        </h3>
-                        <div className="space-y-1 text-gray-600 flex flex-col items-start">
-                          <p className="flex justify-center items-center gap-4">
-                            <FaTrainSubway />
-                            <span>
-                              <strong>Transit:</strong> {option.transitNumber}
-                            </span>
-                          </p>
-                          <p className="flex justify-center items-center gap-4">
-                            <FaLocationDot />
-                            <span>
-                              <strong>Destination:</strong>{" "}
-                              {option.stationAddress.length < 40
-                                ? option.stationAddress
-                                : option.stationAddress
-                                    .substring(0, 40)
-                                    .trim() + " ..."}
-                            </span>
-                          </p>
-                          <p className="flex justify-center items-center gap-4">
-                            <FaClock />
-                            <span>
-                              <strong>Departure:</strong> {option.departureTime}
-                            </span>
-                          </p>
-                          {option.university && (
-                            <p className="flex justify-center items-center gap-4">
-                              <FaUniversity />
-                              <span>
-                                <strong>University:</strong>{" "}
-                                {getUniversityName(option.university)}
-                              </span>
-                            </p>
-                          )}
-                        </div>
-                      </div>
-                      <div className="ml-4">
-                        <input
-                          type="radio"
-                          name="transit"
-                          checked={selectedOption?.id === option.id}
-                          onChange={() => setSelectedOption(option)}
-                          className="w-4 h-4 text-blue-600"
-                        />
-                      </div>
-                    </div>
-                  </div>
+                    option={option}
+                    selectedOption={selectedOption}
+                    setSelectedOption={setSelectedOption}
+                  />
                 ))}
               </div>
 

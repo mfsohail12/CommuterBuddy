@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { supabase} from "../lib/supabase.js"
+import { supabase } from "../lib/supabase.js";
 import { useLocation, useNavigate } from "react-router-dom";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { FaBus } from "react-icons/fa";
@@ -8,10 +8,10 @@ import { FaTrain } from "react-icons/fa6";
 import { FaClock } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
 import { FaArrowLeftLong } from "react-icons/fa6";
-import { FaExternalLinkAlt } from 'react-icons/fa'
+import { FaExternalLinkAlt } from "react-icons/fa";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-import RealtimeChat from '../components/RealtimeChat';
+import RealtimeChat from "../components/RealtimeChat";
 
 // Fix for default markers in react-leaflet
 delete L.Icon.Default.prototype._getIconUrl;
@@ -30,17 +30,16 @@ function MapPage() {
   const navigate = useNavigate();
 
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-  buddy.stationAddress
-)}`
-
+    buddy.university_address
+  )}`;
 
   // parsing transitNumber to determine transit type
   const trainRegex = /\b(train)\b/i;
   const subwayMetroRegex = /\b(subway|metro)\b/i;
   let transitType = "";
-  if (trainRegex.test(buddy.transitNumber)) {
+  if (trainRegex.test(buddy.bus_number)) {
     transitType = "train";
-  } else if (subwayMetroRegex.test(buddy.transitNumber)) {
+  } else if (subwayMetroRegex.test(buddy.bus_number)) {
     transitType = "subwayMetro";
   }
   const [chatOpen, setChatOpen] = useState(false);
@@ -49,10 +48,12 @@ function MapPage() {
   useEffect(() => {
     // Get current user
     const getCurrentUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       setUser(user);
     };
-    
+
     getCurrentUser();
 
     // Listen for auth changes
@@ -76,7 +77,7 @@ function MapPage() {
       username: "Bob",
       message: "hi",
       icon: "https://api.dicebear.com/7.x/avataaars/svg?seed=fdajsljfldaskl",
-    }
+    },
   ]);
 
   if (!buddy) {
@@ -113,7 +114,7 @@ function MapPage() {
         <div className="max-w-6xl mx-auto">
           <h1 className="text-3xl font-bold text-white mb-4">
             Your CommuterBuddy is{" "}
-            <span className="text-yellow-500">{buddy.userName}</span>!
+            <span className="text-yellow-500">{buddy.name}</span>!
           </h1>
           <div className="flex flex-wrap gap-5 text-sm text-white justify-center items-center">
             <span className="flex justify-center items-center gap-2">
@@ -125,19 +126,19 @@ function MapPage() {
                 <FaBus className="text-lg" />
               )}
               <span>
-                <strong>Shared transit:</strong> {buddy.transitNumber}
+                <strong>Shared transit:</strong> {buddy.bus_number}
               </span>
             </span>
             <span className="flex justify-center items-center gap-2">
               <FaClock className="text-lg" />
               <span>
-                <strong>Departure:</strong> {buddy.departureTime}
+                <strong>Departure:</strong> {buddy.departure_time}
               </span>
             </span>
             <span className="flex justify-center items-center gap-2">
               <FaLocationDot className="text-lg" />
               <span>
-                <strong>Destination:</strong> {buddy.stationAddress}
+                <strong>Destination:</strong> {buddy.university_address}
               </span>
             </span>
           </div>
@@ -146,8 +147,8 @@ function MapPage() {
 
       {/* Chat Button - Only show when chat is closed */}
       {!chatOpen && (
-        <button 
-          onClick={() => setChatOpen(true)} 
+        <button
+          onClick={() => setChatOpen(true)}
           className="fixed bottom-6 right-6 bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-lg transition-colors z-[1000]"
         >
           💬 Chat
@@ -170,14 +171,14 @@ function MapPage() {
 
       {/* Chat Side Panel */}
       {chatOpen && user && (
-        <RealtimeChat 
+        <RealtimeChat
           roomName={`buddy-${buddy.id}`}
-          onClose={() => setChatOpen(false)} 
+          onClose={() => setChatOpen(false)}
         />
       )}
       <div className="bg-white overflow-hidden h-full w-screen">
         <MapContainer
-          center={[buddy.lat, buddy.lng]}
+          center={[buddy.latitude, buddy.longitude]}
           zoom={15}
           style={{ height: "640px", width: "100%" }}
         >
@@ -185,14 +186,16 @@ function MapPage() {
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-          <Marker position={[buddy.lat, buddy.lng]}>
+          <Marker position={[buddy.latitude, buddy.longitude]}>
             <Popup>
               <div className="text-center">
-                <h3 className="font-semibold text-lg">{buddy.userName}</h3>
-                <p className="text-sm text-gray-600">{buddy.transitNumber}</p>
-                <p className="text-sm text-gray-600">{buddy.stationAddress}</p>
+                <h3 className="font-semibold text-lg">{buddy.name}</h3>
+                <p className="text-sm text-gray-600">{buddy.bus_number}</p>
+                <p className="text-sm text-gray-600">
+                  {buddy.university_address}
+                </p>
                 <p className="text-sm font-medium text-blue-600">
-                  Departure: {buddy.departureTime}
+                  Departure: {buddy.departure_time}
                 </p>
                 <a
                   href={mapsUrl}
@@ -202,7 +205,6 @@ function MapPage() {
                 >
                   <FaExternalLinkAlt className="mr-1" /> Open in Google Maps
                 </a>
-
               </div>
             </Popup>
           </Marker>
