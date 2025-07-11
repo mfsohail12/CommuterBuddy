@@ -8,7 +8,7 @@ By turning idle time into meaningful social interaction, CommuterBuddy fosters p
 
 ![alt](/public/hp.gif)
 
-[Live View](https://commuterbuddy.netlify.app/)
+[Live View](https://commuter-buddy-pi.vercel.app/)
 
 ## Features
 
@@ -23,7 +23,7 @@ By turning idle time into meaningful social interaction, CommuterBuddy fosters p
 
 **Frontend:** React.js, Tailwind CSS, React Router, Leaflet Maps, React Icons
 **Backend:** Supabase (PostgreSQL, Auth, Real-time)
-**Deployment:** Netlify
+**Deployment:** Vercel
 
 ## Target Community
 
