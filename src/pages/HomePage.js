@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 import { MdEmojiPeople } from "react-icons/md";
 import { FaMapMarkedAlt } from "react-icons/fa";
+import { FaGithub } from "react-icons/fa";
 import { motion } from "motion/react";
 import toast from "react-hot-toast";
 import AuthModal from "../components/AuthModal";
@@ -168,6 +169,12 @@ function HomePage() {
             ))
           )}
         </div>
+        <footer className="h-10 flex justify-center items-center absolute bottom-0 w-screen px-4">
+          <a href="https://github.com/mfsohail12/CommuterBuddy">
+            <FaGithub className="text-white text-xl" />
+          </a>
+          <p className="text-white text-xs ml-auto">© 2025</p>
+        </footer>
       </div>
 
       {/* Auth Modal */}
